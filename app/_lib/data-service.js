@@ -140,11 +140,16 @@ export async function getSettings() {
 export async function getCountries() {
   try {
     const res = await fetch(
-      "https://restcountries.com/v2/all?fields=name,flag",
+      "https://countries.dev/countries?fields=name,flag&sort=name",
     );
+
+    if (!res.ok) throw new Error("Failed to fetch countries");
+
     const countries = await res.json();
+
     return countries;
-  } catch {
+  } catch (err) {
+    console.error(err);
     throw new Error("Could not fetch countries");
   }
 }
@@ -183,20 +188,20 @@ export async function createBooking(newBooking) {
 // UPDATE
 
 // The updatedFields is an object which should ONLY contain the updated data
-export async function updateGuest(id, updatedFields) {
-  const { data, error } = await supabase
-    .from("guests")
-    .update(updatedFields)
-    .eq("id", id)
-    .select()
-    .single();
+// export async function updateGuest(id, updatedFields) {
+//   const { data, error } = await supabase
+//     .from("guests")
+//     .update(updatedFields)
+//     .eq("id", id)
+//     .select()
+//     .single();
 
-  if (error) {
-    console.error(error);
-    throw new Error("Guest could not be updated");
-  }
-  return data;
-}
+//   if (error) {
+//     console.error(error);
+//     throw new Error("Guest could not be updated");
+//   }
+//   return data;
+// }
 
 export async function updateBooking(id, updatedFields) {
   const { data, error } = await supabase
